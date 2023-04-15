@@ -21,11 +21,13 @@ public readonly struct DollarAmount
         init {
             if (value < 0) {
                 throw new ArgumentOutOfRangeException(
+                    nameof(value),
                     $"Value should be positive; got {0.01m * value} dollars"
                 );
             }
             if (value > 999_999_999.99m) {
                 throw new ArgumentOutOfRangeException(
+                    nameof(value),
                     $"Value should be below $999 999 999,99; got {0.01m * value} dollars"
                 );
             }
@@ -68,7 +70,7 @@ public readonly struct DollarAmount
         return new DollarAmount { Dollars = dollars };
     }
 
-    // Helper: Convert a positive number up to 999 999 999 to english words
+    // Helper: Converts a positive number up to 999 999 999 to english words
     private static string NumberToWords(long num) {
         if (num <= 9) {
             string[] digitWords = { "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine" };
@@ -77,6 +79,7 @@ public readonly struct DollarAmount
             string[] teenWords = { "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen" };
             return teenWords[num - 10];
         } else if (num <= 99) {
+            // First two entries are already covered by previous cases
             string[] tensWords = { "", "", "twenty", "thirty", "fourty", "sixty", "seventy", "eighty", "ninety" };
             string tens = tensWords[num / 10];
             if (num % 10 == 0) {
@@ -105,7 +108,44 @@ public readonly struct DollarAmount
                 return $"{NumberToWords(num / 1000_000)} million {NumberToWords(num % 1000_000)}";
             }
         } else {
-            throw new ArgumentOutOfRangeException("num is larger than 999 999 999; not supported");
+            throw new ArgumentOutOfRangeException(nameof(num), "Argument is larger than 999 999 999; not supported");
+        }
+    }
+
+    /// <summary>
+    /// Converts the DollarAmount to its string representation as English words.
+    /// </summary>
+    /// <returns>English words describing the amount in dollars.</returns>
+    public string ToWords() {
+        // Split into dollar and cent parts
+        long dollarCount = Cents / 100;
+        long centCount = Cents % 100;
+
+        // Convert dollar part into words
+        string dollarWords;
+        if (dollarCount == 1) {
+            dollarWords = "one dollar";
+        } else {
+            dollarWords = $"{NumberToWords(dollarCount)} dollars";
+        }
+
+        // Convert cent part into words
+        string centWords;
+        if (centCount == 1) {
+            centWords = "one cent";
+        } else {
+            centWords = $"{NumberToWords(centCount)} cents";
+        }
+
+        if (centCount == 0) {
+            // No cents (including zero dollars)
+            return dollarWords;
+        } else if (dollarCount == 0) {
+            // Only cents (at least one)
+            return centWords;
+        } else {
+            // Both dollars and cents
+            return $"{dollarWords} and {centWords}";
         }
     }
 }
