@@ -13,7 +13,24 @@ public readonly struct DollarAmount
     /// </summary>
     public decimal Dollars {
         get { return m_dollars; }
-        init { m_dollars = value; }
+        init {
+            if (value < 0) {
+                throw new ArgumentOutOfRangeException(
+                    $"Value should be positive; got {0.01m * value} dollars"
+                );
+            }
+            if (value > 999_999_999.99m) {
+                throw new ArgumentOutOfRangeException(
+                    $"Value should be below $999 999 999,99; got {0.01m * value} dollars"
+                );
+            }
+            if (value % 0.01m != 0) {
+                throw new ArgumentException(
+                    $"Value should be a multiple of 0.01 dollars; got {0.01m * value} dollars"
+                );
+            }
+            m_dollars = value;
+        }
     }
 
     /// <summary>
