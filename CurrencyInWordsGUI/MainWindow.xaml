@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:CurrencyInWordsGUI"
         xmlns:s="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="Convert Currency to Words" Height="120" Width="200" MinWidth="100" MinHeight="80">
+        Title="Convert Currency to Words" Height="150" Width="350" MinWidth="100" MinHeight="100">
     <Grid>
         <TextBox x:Name="InputTxt" Margin="10,10,50,10" Text="" Height="20" VerticalAlignment="Top" VerticalContentAlignment="Center" InputScope="Number"/>
         <Button x:Name="ConvertBtn" HorizontalAlignment="Right" Height="20" Margin="0,10,10,0" VerticalAlignment="Top" Width="30" IsDefault="True" Click="ConvertBtn_Click">

@@ -8,6 +8,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{1100C4D4-DE58-4944-ACCE-B3D7FF462539}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CurrencyInWordsGUI", "CurrencyInWordsGUI\CurrencyInWordsGUI.csproj", "{768AB2BB-FE19-481E-9011-70BB7ECA649D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{14B580EC-6C10-4677-870C-8F1379F8C2C8} = {14B580EC-6C10-4677-870C-8F1379F8C2C8}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

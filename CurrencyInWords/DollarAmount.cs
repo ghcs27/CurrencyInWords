@@ -20,21 +20,13 @@ public readonly struct DollarAmount
         get { return m_dollars; }
         init {
             if (value < 0) {
-                throw new ArgumentOutOfRangeException(
-                    nameof(value),
-                    $"Value should be positive; got {0.01m * value} dollars"
-                );
+                throw new ArgumentOutOfRangeException(null, "Value should be positive");
             }
             if (value > 999_999_999.99m) {
-                throw new ArgumentOutOfRangeException(
-                    nameof(value),
-                    $"Value should be below $999 999 999,99; got {0.01m * value} dollars"
-                );
+                throw new ArgumentOutOfRangeException(null, "Value should be below 999 999 999,99");
             }
             if (value % 0.01m != 0) {
-                throw new ArgumentException(
-                    $"Value should be a multiple of 0.01 dollars; got {0.01m * value} dollars"
-                );
+                throw new ArgumentException("Value should be a multiple of 0,01 dollars");
             }
             m_dollars = value;
         }
