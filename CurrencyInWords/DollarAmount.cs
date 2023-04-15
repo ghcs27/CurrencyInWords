@@ -80,7 +80,7 @@ public readonly struct DollarAmount
             return teenWords[num - 10];
         } else if (num <= 99) {
             // First two entries are already covered by previous cases
-            string[] tensWords = { "", "", "twenty", "thirty", "fourty", "sixty", "seventy", "eighty", "ninety" };
+            string[] tensWords = { "", "", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety" };
             string tens = tensWords[num / 10];
             if (num % 10 == 0) {
                 return tens;
@@ -88,21 +88,21 @@ public readonly struct DollarAmount
                 // Recurse to use previous cases for one's digit
                 return $"{tens}-{NumberToWords(num % 10)}";
             }
-        } else if (num < 999) {
+        } else if (num <= 999) {
             // Recurse to use previous cases for hundred's digit and rest
             if (num % 100 == 0) {
                 return $"{NumberToWords(num / 100)} hundred";
             } else {
                 return $"{NumberToWords(num / 100)} hundred {NumberToWords(num % 100)}";
             }
-        } else if (num < 999_999) {
+        } else if (num <= 999_999) {
             if (num % 1000 == 0) {
                 return $"{NumberToWords(num / 1000)} thousand";
             } else {
                 return $"{NumberToWords(num / 1000)} thousand {NumberToWords(num % 1000)}";
             }
-        } else if (num < 999_999_999) {
-            if (num % 1000 == 0) {
+        } else if (num <= 999_999_999) {
+            if (num % 1000_000 == 0) {
                 return $"{NumberToWords(num / 1000_000)} million";
             } else {
                 return $"{NumberToWords(num / 1000_000)} million {NumberToWords(num % 1000_000)}";
@@ -138,11 +138,8 @@ public readonly struct DollarAmount
         }
 
         if (centCount == 0) {
-            // No cents (including zero dollars)
+            // No cents
             return dollarWords;
-        } else if (dollarCount == 0) {
-            // Only cents (at least one)
-            return centWords;
         } else {
             // Both dollars and cents
             return $"{dollarWords} and {centWords}";
