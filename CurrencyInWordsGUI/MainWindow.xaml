@@ -1,0 +1,17 @@
+﻿<Window x:Class="CurrencyInWordsGUI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CurrencyInWordsGUI"
+        xmlns:s="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d"
+        Title="Convert Currency to Words" Height="120" Width="200" MinWidth="100" MinHeight="80">
+    <Grid>
+        <TextBox x:Name="InputTxt" Margin="10,10,50,10" Text="" Height="20" VerticalAlignment="Top" VerticalContentAlignment="Center" InputScope="Number"/>
+        <Button x:Name="ConvertBtn" HorizontalAlignment="Right" Height="20" Margin="0,10,10,0" VerticalAlignment="Top" Width="30" IsDefault="True" Click="ConvertBtn_Click">
+            <TextBlock Text="→" VerticalAlignment="Center" FontSize="18" Padding="0,0,0,4"/>
+        </Button>
+        <TextBox x:Name="OutputTxt" Margin="10,40,10,10" TextWrapping="Wrap" Text="" IsReadOnly="True" BorderThickness="0"/><!-- TextBox instead of TextBlock to make it copyable -->
+    </Grid>
+</Window>
