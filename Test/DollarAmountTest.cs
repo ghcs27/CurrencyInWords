@@ -18,4 +18,31 @@ public class DollarAmountTest
         string words = amount.ToWords();
         Assert.AreEqual(expectedWords, words);
     }
+
+    [TestMethod]
+    [DataRow("xyz")]
+    [DataRow("0.5")]
+    [DataRow("-1")]
+    public void TestFormatException(string input) {
+        Assert.ThrowsException<FormatException>(() => {
+            DollarAmount.Parse(input);
+        });
+    }
+
+    [TestMethod]
+    [DataRow("100 000 000 000")]
+    public void TestRangeException(string input) {
+        Assert.ThrowsException<ArgumentOutOfRangeException>(() => {
+            DollarAmount.Parse(input);
+        });
+    }
+
+    [TestMethod]
+    [DataRow("0,001")]
+    [DataRow("1,234")]
+    public void TestArgumentException(string input) {
+        Assert.ThrowsException<ArgumentException>(() => {
+            DollarAmount.Parse(input);
+        });
+    }
 }
