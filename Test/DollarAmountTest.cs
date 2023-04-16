@@ -14,7 +14,7 @@ public class DollarAmountTest
     [DataRow("999 999 999,99", 999_999_999_99, "nine hundred ninety-nine million nine hundred ninety-nine thousand nine hundred ninety-nine dollars and ninety-nine cents")]
     public void TestDollarsToWords(string input, long cents, string expectedWords) {
         DollarAmount amount = DollarAmount.Parse(input);
-        Assert.AreEqual(cents, amount.Cents);
+        Assert.AreEqual(cents, amount.InCents);
         string words = amount.ToWords();
         Assert.AreEqual(expectedWords, words);
     }

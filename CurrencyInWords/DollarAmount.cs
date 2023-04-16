@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using System.Globalization;
+﻿using System.Globalization;
 
 namespace CurrencyInWords;
 
@@ -16,7 +15,7 @@ public readonly struct DollarAmount
     /// </summary>
     /// <exception cref="ArgumentOutOfRangeException">Value is negative or greater than 999 999 999.99.</exception>
     /// <exception cref="ArgumentException">Value is not a multiple of 0.01.</exception>
-    public decimal Dollars {
+    public decimal InDollars {
         get { return m_dollars; }
         init {
             if (value < 0) {
@@ -36,9 +35,9 @@ public readonly struct DollarAmount
     /// Full amount in cents.
     /// Between 0 and 99_999_999_999 (inclusive).
     /// </summary>
-    public long Cents {
+    public long InCents {
         get { return (long) (100 * m_dollars); }
-        init { Dollars = 0.01m * value; }
+        init { InDollars = 0.01m * value; }
     }
 
     /// <summary>
@@ -59,18 +58,21 @@ public readonly struct DollarAmount
                 NumberGroupSeparator = " "
             }
         );
-        return new DollarAmount { Dollars = dollars };
+        return new DollarAmount { InDollars = dollars };
     }
 
     // Helper: Converts a positive number up to 999 999 999 to english words
     private static string NumberToWords(long num) {
         if (num <= 9) {
+            // Single digits
             string[] digitWords = { "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine" };
             return digitWords[num];
         } else if (num <= 19) {
+            // Numbers 10 to 19
             string[] teenWords = { "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen" };
             return teenWords[num - 10];
         } else if (num <= 99) {
+            // Double-digits above 19: {}ty-{}
             // First two entries are already covered by previous cases
             string[] tensWords = { "", "", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety" };
             string tens = tensWords[num / 10];
@@ -81,6 +83,7 @@ public readonly struct DollarAmount
                 return $"{tens}-{NumberToWords(num % 10)}";
             }
         } else if (num <= 999) {
+            // Triple digits: {} hundred {}
             // Recurse to use previous cases for hundred's digit and rest
             if (num % 100 == 0) {
                 return $"{NumberToWords(num / 100)} hundred";
@@ -88,18 +91,21 @@ public readonly struct DollarAmount
                 return $"{NumberToWords(num / 100)} hundred {NumberToWords(num % 100)}";
             }
         } else if (num <= 999_999) {
+            // Thousands
             if (num % 1000 == 0) {
                 return $"{NumberToWords(num / 1000)} thousand";
             } else {
                 return $"{NumberToWords(num / 1000)} thousand {NumberToWords(num % 1000)}";
             }
         } else if (num <= 999_999_999) {
+            // Millions
             if (num % 1000_000 == 0) {
                 return $"{NumberToWords(num / 1000_000)} million";
             } else {
                 return $"{NumberToWords(num / 1000_000)} million {NumberToWords(num % 1000_000)}";
             }
         } else {
+            // Should never be called with 1 billion or more
             throw new ArgumentOutOfRangeException(nameof(num), "Argument is larger than 999 999 999; not supported");
         }
     }
@@ -110,8 +116,8 @@ public readonly struct DollarAmount
     /// <returns>English words describing the amount in dollars.</returns>
     public string ToWords() {
         // Split into dollar and cent parts
-        long dollarCount = Cents / 100;
-        long centCount = Cents % 100;
+        long dollarCount = InCents / 100;
+        long centCount = InCents % 100;
 
         // Convert dollar part into words
         string dollarWords;
@@ -130,10 +136,10 @@ public readonly struct DollarAmount
         }
 
         if (centCount == 0) {
-            // No cents
+            // No cents (including case 0,00 -> zero dollars)
             return dollarWords;
         } else {
-            // Both dollars and cents
+            // Both dollars and cents (including case 0,xx -> zero dollars and [xx] cents)
             return $"{dollarWords} and {centWords}";
         }
     }
